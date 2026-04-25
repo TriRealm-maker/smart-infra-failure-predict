@@ -1,0 +1,16 @@
+{
+  "name": "crisisguard-ai",
+  "version": "1.0.0",
+  "description": "AI-Powered Emergency Response System",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "npm install --prefix client && npm run build --prefix client",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
