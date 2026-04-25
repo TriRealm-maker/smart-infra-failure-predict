@@ -55,6 +55,7 @@ export default {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'mesh-move': 'meshMove 20s ease-in-out infinite',
         'spin-slow': 'spin 2s linear infinite',
+        spotlight: 'spotlight 2s ease .75s 1 forwards',
       },
       keyframes: {
         fadeUp: {
@@ -65,6 +66,10 @@ export default {
           '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
           '33%': { transform: 'translate(30px, -20px) scale(1.1)' },
           '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+        },
+        spotlight: {
+          '0%': { opacity: '0', transform: 'translate(-72%, -62%) scale(0.5)' },
+          '100%': { opacity: '1', transform: 'translate(-50%, -40%) scale(1)' },
         },
       },
       boxShadow: {

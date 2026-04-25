@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Coordinates, WeatherData } from '../types';
 import { Counter, GlassCard } from '../components/ui';
-import { cn, getAQIColor, getAQIBgColor } from '../lib/utils';
+import { cn } from '../lib/utils';
+import { SplineSceneBasic } from '../components/ui/SplineSceneBasic';
+import { TextScramble } from '../components/ui/text-scramble';
 import {
   CloudIcon,
   BoltIcon,
@@ -317,10 +319,10 @@ const handleBitchat = () => {
             </div>
             <button 
               onClick={handleBitchat}
-              className="px-5 py-2.5 bg-black border-2 border-white font-dotmatrix text-white text-lg tracking-wider hover:bg-white hover:text-black transition-colors duration-150 whitespace-nowrap"
+              className="px-5 py-2.5 bg-black border-2 border-white hover:bg-white hover:text-black transition-colors duration-150 whitespace-nowrap"
               aria-label="Launch Comms"
             >
-              LAUNCH P2P RADIO
+              <TextScramble text="LAUNCH P2P RADIO" className="font-dotmatrix text-white hover:text-black" />
             </button>
           </div>
         </div>
@@ -365,6 +367,10 @@ const handleBitchat = () => {
             );
           })}
         </div>
+      </motion.div>
+
+      <motion.div variants={itemVariants}>
+        <SplineSceneBasic />
       </motion.div>
     </motion.div>
   );

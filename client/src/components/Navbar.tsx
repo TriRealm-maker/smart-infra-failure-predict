@@ -59,9 +59,9 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-[9999] md:block hidden" style={{ position: 'sticky', top: 0 }}>
-        <div className="glass backdrop-blur-xl border-b border-border-light dark:border-border-dark">
-          <div className="max-w-7xl mx-auto px-4">
+      <nav className="fixed top-3 left-0 right-0 z-[9999] hidden md:block">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="glass rounded-2xl px-4 shadow-card hover:shadow-card-hover transition-all duration-300 border border-white/40 dark:border-white/10">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-3">
                 <div className="w-9 h-9 bg-gradient-to-br from-primary to-purple-600 rounded-xl flex items-center justify-center shadow-glow-primary">
@@ -80,17 +80,17 @@ export function Navbar() {
                       key={item.path}
                       to={item.path}
                       className={cn(
-                        'relative px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                        'relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:-translate-y-0.5',
                         isActive
                           ? 'text-primary dark:text-primary-light'
-                          : 'text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark'
+                          : 'text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark hover:bg-black/5 dark:hover:bg-white/5'
                       )}
                     >
                       <AnimatePresence mode="wait">
                         {isActive && (
                           <motion.div
                             layoutId="nav-pill"
-                            className="absolute inset-0 bg-primary/10 dark:bg-primary/20 rounded-lg"
+                            className="absolute inset-0 bg-gradient-to-r from-primary/15 to-purple-500/15 dark:from-primary/25 dark:to-purple-500/20 rounded-xl border border-primary/20 dark:border-primary/30"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -174,7 +174,7 @@ export function Navbar() {
         </div>
       </nav>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-xl border-t border-border-light dark:border-border-dark">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-xl border-t border-border-light dark:border-border-dark shadow-[0_-10px_30px_rgba(0,0,0,0.08)]">
         <div className="flex items-center justify-around h-16">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -183,7 +183,7 @@ export function Navbar() {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  'relative flex flex-col items-center justify-center flex-1 h-full',
+                  'relative flex flex-col items-center justify-center flex-1 h-full transition-colors duration-300',
                   isActive ? 'text-primary dark:text-primary-light' : 'text-text-secondary-light dark:text-text-secondary-dark'
                 )}
               >

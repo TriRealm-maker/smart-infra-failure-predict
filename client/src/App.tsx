@@ -19,9 +19,15 @@ import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import './i18n';
 
 const pageVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
+  initial: { opacity: 0, y: 24, scale: 0.98, filter: 'blur(6px)' },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: 'blur(0px)',
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: { opacity: 0, y: -16, scale: 0.99, filter: 'blur(4px)', transition: { duration: 0.22 } },
 };
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -30,6 +36,7 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
     initial="initial"
     animate="animate"
     exit="exit"
+    className="min-h-[calc(100vh-10rem)]"
   >
     {children}
   </motion.div>
@@ -114,10 +121,15 @@ const AppContent = () => {
 
   return (
     <GeolocationProvider>
-      <div className="min-h-screen bg-background-light dark:bg-background-dark pb-20 md:pb-0">
+      <div className="relative min-h-screen overflow-x-clip bg-background-light dark:bg-background-dark pb-20 md:pb-0">
+        <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+          <div className="absolute -top-32 -left-24 h-80 w-80 rounded-full bg-primary/10 blur-[90px] dark:bg-primary/20" />
+          <div className="absolute top-1/3 -right-24 h-[28rem] w-[28rem] rounded-full bg-purple-500/10 blur-[120px] dark:bg-purple-500/20" />
+          <div className="absolute -bottom-40 left-1/3 h-[24rem] w-[24rem] rounded-full bg-cyan-400/10 blur-[110px] dark:bg-cyan-400/20" />
+        </div>
         <Navbar />
         <SOSButton />
-        <main className="max-w-7xl mx-auto px-4 py-4 md:pt-20">
+        <main className="relative z-10 max-w-7xl mx-auto px-4 py-4 md:pt-24">
           <AnimatedRoutes />
         </main>
       </div>
