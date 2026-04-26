@@ -12,6 +12,7 @@ import predictionRoutes from './routes/predictionRoutes';
 import medicalRoutes from './routes/medicalRoutes';
 import sosRoutes from './routes/sosRoutes';
 import debugRoutes from './routes/debugRoutes';
+import assistantRoutes from './routes/assistantRoutes';
 
 // Required environment variables:
 // MONGODB_URI — MongoDB Atlas connection string
@@ -64,6 +65,7 @@ app.use('/api', predictionRoutes);
 app.use('/api/medical', medicalRoutes);
 app.use('/api/sos', sosRoutes);
 app.use('/api/debug', debugRoutes);
+app.use('/api/assistant', assistantRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'CrisisGuard API is running' });

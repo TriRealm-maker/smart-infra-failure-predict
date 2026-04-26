@@ -380,11 +380,11 @@ export const AssetMap = ({ coords }: Props) => {
             initial={{ x: -320, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+            transition={{ type: 'spring', stiffness: 190, damping: 24, mass: 0.9 }}
             className="absolute top-4 left-4 bottom-4 w-80 z-[400] flex flex-col"
           >
-            <div className="flex-1 glass rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-              <div className="p-4 border-b border-border-light dark:border-border-dark">
+            <div className="flex-1 glass-map-panel rounded-2xl flex flex-col overflow-hidden">
+              <div className="p-4 border-b border-white/20 dark:border-white/10">
                 <div className="flex justify-between items-center mb-3">
                   <h2 className="text-lg font-bold text-text-primary-light dark:text-text-primary-dark">
                     Nearby Services Tracker
@@ -403,12 +403,12 @@ export const AssetMap = ({ coords }: Props) => {
                     placeholder="Search services..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full rounded-xl border border-white/30 bg-white/30 py-2 pl-9 pr-4 text-sm backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-primary/50 dark:border-white/15 dark:bg-slate-900/40"
                   />
                 </div>
               </div>
 
-              <div className="p-3 border-b border-border-light dark:border-border-dark">
+              <div className="p-3 border-b border-white/20 dark:border-white/10">
                 <div className="flex gap-2">
                   {filters.map((filter) => (
                     <button
@@ -418,7 +418,7 @@ export const AssetMap = ({ coords }: Props) => {
                         'px-3 py-1.5 text-xs font-medium rounded-full transition-all',
                         activeFilter === filter.type
                           ? 'bg-primary text-white'
-                          : 'bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark text-text-secondary-light dark:text-text-secondary-dark hover:border-primary/50'
+                          : 'border border-white/30 bg-white/30 text-text-secondary-light backdrop-blur-md hover:border-primary/50 dark:border-white/15 dark:bg-slate-900/40 dark:text-text-secondary-dark'
                       )}
                     >
                       {filter.label}
@@ -436,12 +436,12 @@ export const AssetMap = ({ coords }: Props) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: i * 0.1 }}
-                        className="flex space-x-3 p-3 bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark"
+                        className="flex space-x-3 rounded-xl border border-white/25 bg-white/25 p-3 backdrop-blur-md dark:border-white/15 dark:bg-slate-900/40"
                       >
-                        <div className="h-10 w-10 bg-border-light dark:bg-border-dark rounded-lg animate-pulse" />
+                        <div className="h-10 w-10 rounded-lg bg-white/25 animate-pulse dark:bg-white/10" />
                         <div className="flex-1 space-y-2">
-                          <div className="h-4 bg-border-light dark:bg-border-dark rounded w-3/4 animate-pulse" />
-                          <div className="h-3 bg-border-light dark:bg-border-dark rounded w-1/2 animate-pulse" />
+                          <div className="h-4 w-3/4 rounded bg-white/25 animate-pulse dark:bg-white/10" />
+                          <div className="h-3 w-1/2 rounded bg-white/25 animate-pulse dark:bg-white/10" />
                         </div>
                       </motion.div>
                     ))}
@@ -459,9 +459,9 @@ export const AssetMap = ({ coords }: Props) => {
                       key={place.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
+                      transition={{ delay: index * 0.04, duration: 0.28 }}
                       onClick={() => flyToPlace(place)}
-                      className="p-3 bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark hover:border-primary/30 cursor-pointer transition-all hover:shadow-md"
+                      className="cursor-pointer rounded-xl border border-white/25 bg-white/25 p-3 backdrop-blur-md transition-all hover:border-primary/30 hover:bg-white/40 dark:border-white/15 dark:bg-slate-900/40 dark:hover:bg-slate-900/50"
                     >
                       <h3 className="font-semibold text-sm text-text-primary-light dark:text-text-primary-dark mb-1">
                         {place.title}
@@ -491,14 +491,14 @@ export const AssetMap = ({ coords }: Props) => {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
           onClick={() => setShowPanel(true)}
-          className="absolute bottom-4 left-4 z-[400] glass px-4 py-3 rounded-full flex items-center space-x-2 shadow-lg"
+          className="absolute bottom-4 left-4 z-[400] glass-map-panel rounded-full px-4 py-3 flex items-center space-x-2"
         >
           <Bars3Icon className="h-5 w-5" />
           <span className="font-medium text-sm">Services ({filteredPlaces.length})</span>
         </motion.button>
       )}
 
-      <div className="absolute bottom-4 right-4 z-[400] glass px-3 py-2 rounded-xl text-xs">
+      <div className="absolute bottom-4 right-4 z-[400] glass-map-panel rounded-xl px-3 py-2 text-xs">
         <div className="font-medium mb-2 text-text-secondary-light dark:text-text-secondary-dark">Service Legend</div>
         <div className="space-y-1">
           <div className="flex items-center gap-2">

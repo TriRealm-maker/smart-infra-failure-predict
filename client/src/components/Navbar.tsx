@@ -59,15 +59,21 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-3 left-0 right-0 z-[9999] hidden md:block">
+      <nav className="fixed left-0 right-0 top-4 z-[9999] hidden md:block">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="glass rounded-2xl px-4 shadow-card hover:shadow-card-hover transition-all duration-300 border border-white/40 dark:border-white/10">
+          <div className="relative overflow-hidden glass gradient-border rounded-2xl px-4 shadow-[0_20px_45px_-30px_rgba(15,23,42,0.6)] hover:shadow-[0_22px_55px_-28px_rgba(79,70,229,0.45)] transition-all duration-300">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-indigo-400/0 via-indigo-400/8 to-cyan-400/0" />
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-3">
-                <div className="w-9 h-9 bg-gradient-to-br from-primary to-purple-600 rounded-xl flex items-center justify-center shadow-glow-primary">
+                <motion.div
+                  whileHover={{ rotate: -8, scale: 1.08 }}
+                  animate={{ y: [0, -2, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  className="w-9 h-9 bg-gradient-to-br from-primary via-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-glow-primary"
+                >
                   <span className="text-white font-bold text-sm">CG</span>
-                </div>
-                <span className="font-bold text-lg text-text-primary-light dark:text-text-primary-dark">
+                </motion.div>
+                <span className="font-bold text-lg bg-gradient-to-r from-text-primary-light via-primary to-purple-600 bg-clip-text text-transparent dark:from-text-primary-dark dark:via-primary-light dark:to-purple-300">
                   CrisisGuard
                 </span>
               </div>
@@ -174,7 +180,7 @@ export function Navbar() {
         </div>
       </nav>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-xl border-t border-border-light dark:border-border-dark shadow-[0_-10px_30px_rgba(0,0,0,0.08)]">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border-light/70 bg-surface-light/85 shadow-[0_-16px_36px_rgba(0,0,0,0.12)] backdrop-blur-xl dark:border-border-dark dark:bg-surface-dark/80">
         <div className="flex items-center justify-around h-16">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -198,9 +204,9 @@ export function Navbar() {
                     />
                   )}
                 </AnimatePresence>
-                <item.icon className="w-5 h-5 mb-1" />
-                <span className="text-[10px] font-medium">{t(item.label)}</span>
-              </Link>
+                  <item.icon className={cn('w-5 h-5 mb-1 transition-transform duration-200', isActive && 'scale-110')} />
+                  <span className="text-[10px] font-medium">{t(item.label)}</span>
+                </Link>
             );
           })}
         </div>

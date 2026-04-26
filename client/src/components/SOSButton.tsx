@@ -80,12 +80,22 @@ export function SOSButton() {
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleSOSClick}
-        className="fixed bottom-24 right-4 z-[10000] w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-red-500 to-red-700 rounded-full shadow-lg shadow-red-500/50 flex items-center justify-center hover:shadow-red-500/70 transition-shadow"
+        className="group fixed bottom-24 right-4 z-[10000] flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-red-500 via-red-600 to-red-700 shadow-lg shadow-red-500/50 transition-shadow hover:shadow-red-500/80 md:h-20 md:w-20"
         title="Send SOS"
       >
+        <motion.span
+          animate={{ scale: [1, 1.45], opacity: [0.45, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeOut' }}
+          className="absolute inset-0 rounded-full border border-red-300/80"
+        />
+        <motion.span
+          animate={{ scale: [1, 1.3], opacity: [0.35, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeOut', delay: 0.45 }}
+          className="absolute inset-0 rounded-full border border-red-200/70"
+        />
         <ExclamationTriangleIcon className="w-8 h-8 md:w-10 md:h-10 text-white" />
       </motion.button>
 
@@ -105,8 +115,8 @@ export function SOSButton() {
               onClick={(e) => e.stopPropagation()}
               className={cn(
                 'w-full max-w-md p-6 rounded-2xl',
-                'bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark',
-                'shadow-xl'
+                'bg-surface-light/95 dark:bg-surface-dark/95 border border-border-light dark:border-border-dark',
+                'shadow-[0_24px_60px_-30px_rgba(15,23,42,0.7)]'
               )}
             >
               {state === 'confirming' && (

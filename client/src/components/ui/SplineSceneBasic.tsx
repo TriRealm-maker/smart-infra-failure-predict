@@ -4,26 +4,57 @@ import { FormEvent, Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MessageCircle, Send, X } from 'lucide-react';
 import { Card } from './Card';
+import { api, AssistantChatMessage } from '../../services/api';
 
 const Spline = lazy(() => import('@splinetool/react-spline'));
 
-type ChatRole = 'user' | 'assistant';
-
 interface ChatMessage {
-  role: ChatRole;
+  role: AssistantChatMessage['role'];
   content: string;
 }
 
-const SYSTEM_PROMPT = `You are ARIA, an AI field assistant for CrisisGuard, a crisis management platform for field engineers managing mesh radio networks. You help engineers with: finding repair crews, interpreting failure analytics, explaining SOPs for mesh node failures, reading structural maps, and triaging medical or equipment emergencies. Keep answers short, practical, and field-ready. Use bullet points when listing steps.`;
-
 const ROBOT_SCENE_URL = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
+
+const localFallbackReply = (query: string): string => {
+  const q = query.toLowerCase();
+  if (q.includes('bitchat') || q.includes('mesh')) {
+    return [
+      'Bitchat flow in this site:',
+      '- Open **Dashboard**.',
+      '- Tap **LAUNCH P2P RADIO** in the mesh comms block.',
+      '- Open/install Bitchat, then join your field mesh channel.',
+      '- Keep CrisisGuard open for telemetry, map, and SOS while coordinating.',
+    ].join('\n');
+  }
+  if (q.includes('map') || q.includes('services')) {
+    return [
+      'Map service workflow:',
+      '- Open **Map** from the navbar.',
+      '- Search/filter in **Nearby Services Tracker**.',
+      '- Tap a service row to focus map marker.',
+      '- Use **Get Directions** in marker popup.',
+    ].join('\n');
+  }
+  if (q.includes('sos') || q.includes('emergency')) {
+    return [
+      'SOS workflow:',
+      '- Add contacts in **Settings**.',
+      '- Press the floating **SOS** button and confirm.',
+      '- Contacts receive your emergency alert with location.',
+    ].join('\n');
+  }
+  return [
+    'I can help with CrisisGuard and Bitchat usage.',
+    '- Ask about Dashboard, Map, Prediction, Guides, Resource Depots, Settings, SOS, or Bitchat.',
+  ].join('\n');
+};
 
 export function SplineSceneBasic() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      content: 'ARIA online. Ask for field-ready help with mesh failures, crews, or SOP steps.',
+      content: 'ARIA online. Ask me anything about this site and Bitchat mesh workflows.',
     },
   ]);
   const [input, setInput] = useState('');
@@ -49,36 +80,13 @@ export function SplineSceneBasic() {
     setIsTyping(true);
 
     try {
-      const apiKey = import.meta.env.VITE_GROQ_API_KEY;
-      if (!apiKey) {
-        throw new Error('Missing VITE_GROQ_API_KEY in frontend environment.');
-      }
-
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            ...nextMessages.map((message) => ({ role: message.role, content: message.content })),
-          ],
-        }),
-      });
-
-      if (!response.ok) {
-        const details = await response.text();
-        throw new Error(`Groq request failed (${response.status}): ${details}`);
-      }
-
-      const data = await response.json();
-      const assistantText = data?.choices?.[0]?.message?.content?.trim();
+      const result = await api.assistant.chat(
+        nextMessages.map((message) => ({ role: message.role, content: message.content }))
+      );
+      const assistantText = typeof result?.reply === 'string' ? result.reply.trim() : '';
 
       if (!assistantText) {
-        throw new Error('Groq returned an empty response.');
+        throw new Error(result?.message || 'Assistant returned an empty response.');
       }
 
       setMessages((prev) => [...prev, { role: 'assistant', content: assistantText }]);
@@ -87,7 +95,7 @@ export function SplineSceneBasic() {
       setErrorText(message);
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: 'I could not reach ARIA right now. Please retry in a moment.' },
+        { role: 'assistant', content: localFallbackReply(trimmed) },
       ]);
     } finally {
       setIsTyping(false);
@@ -102,7 +110,7 @@ export function SplineSceneBasic() {
             Interactive 3D
           </h2>
           <p className="mt-4 text-neutral-300 max-w-lg">
-            Tap the robot to open ARIA and get fast field guidance for failures, SOPs, and triage.
+            Tap the robot to ask ARIA about site features, diagnostics workflows, and Bitchat mesh usage.
           </p>
         </div>
 

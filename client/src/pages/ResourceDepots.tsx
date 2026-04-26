@@ -16,7 +16,6 @@ import {
   XMarkIcon,
   ShieldExclamationIcon,
   CloudArrowUpIcon,
-  WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
 import { WrenchScrewdriverIcon as WrenchSolidIcon } from '@heroicons/react/24/solid';
 
@@ -133,35 +132,42 @@ export const ResourceDepots = () => {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-4xl mx-auto pb-24 md:pb-6"
     >
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark flex items-center">
-          <WrenchSolidIcon className="h-8 w-8 text-primary mr-2" />
-          Resource Depots & Contractors
-        </h2>
-        <div className="flex space-x-3">
-          {!isEditing && (
-            <Button onClick={() => setShowShareModal(true)} className="flex items-center">
-              <ShareIcon className="w-4 h-4 mr-2" />
-              {t('medical.share')}
-            </Button>
-          )}
-          <Button
-            variant={isEditing ? 'primary' : 'secondary'}
-            onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-            className="flex items-center"
-          >
-            {isEditing ? (
-              <>
-                <CheckIcon className="w-4 h-4 mr-2" />
-                {t('medical.save')}
-              </>
-            ) : (
-              <>
-                <PencilSquareIcon className="w-4 h-4 mr-2" />
-                {t('medical.edit')}
-              </>
+      <div className="relative mb-6 overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-5 text-white md:p-6">
+        <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-indigo-500/30 blur-3xl" />
+        <div className="absolute -bottom-20 left-16 h-48 w-48 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="flex items-center text-2xl font-bold md:text-3xl">
+              <WrenchSolidIcon className="mr-2 h-8 w-8 text-cyan-300" />
+              Resource Depots & Contractors
+            </h2>
+            <p className="mt-1 text-sm text-white/70">Track teams, capacities, certifications, and secure access links.</p>
+          </div>
+          <div className="flex space-x-3">
+            {!isEditing && (
+              <Button onClick={() => setShowShareModal(true)} className="flex items-center">
+                <ShareIcon className="w-4 h-4 mr-2" />
+                {t('medical.share')}
+              </Button>
             )}
-          </Button>
+            <Button
+              variant={isEditing ? 'primary' : 'secondary'}
+              onClick={() => isEditing ? handleSave() : setIsEditing(true)}
+              className="flex items-center"
+            >
+              {isEditing ? (
+                <>
+                  <CheckIcon className="w-4 h-4 mr-2" />
+                  {t('medical.save')}
+                </>
+              ) : (
+                <>
+                  <PencilSquareIcon className="w-4 h-4 mr-2" />
+                  {t('medical.edit')}
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 

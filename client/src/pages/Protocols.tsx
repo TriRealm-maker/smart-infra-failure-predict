@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -93,7 +92,6 @@ const iconColorMap: Record<DisasterType, string> = {
 };
 
 export const Protocols = () => {
-  const { t } = useTranslation();
   const [selectedDisaster, setSelectedDisaster] = useState<DisasterType>('earthquake');
   const [guide, setGuide] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -153,11 +151,15 @@ export const Protocols = () => {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-4xl mx-auto pb-24 md:pb-6"
     >
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark flex items-center">
-          <BookOpenIcon className="h-8 w-8 text-primary mr-2" />
+      <div className="relative mb-6 overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 text-white">
+        <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-indigo-500/30 blur-3xl" />
+        <h2 className="relative z-10 flex items-center text-2xl font-bold md:text-3xl">
+          <BookOpenIcon className="mr-2 h-8 w-8 text-cyan-300" />
           Standard Operating Procedures
         </h2>
+        <p className="relative z-10 mt-2 text-sm text-white/70">
+          Load, print, and distribute field-ready maintenance playbooks.
+        </p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">

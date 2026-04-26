@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { api } from '../services/api';
 import { MedicalProfile } from '../types';
 import { HeartIcon, ExclamationTriangleIcon, UserCircleIcon, PhoneIcon, DocumentIcon } from '@heroicons/react/24/solid';
@@ -27,18 +28,22 @@ export const SharedProfilePage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0b1020] via-[#111a34] to-[#070a14]">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="h-12 w-12 rounded-full border-4 border-red-400/70 border-t-transparent"
+        />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 max-w-md text-center">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0b1020] via-[#111a34] to-[#070a14] p-4">
+        <div className="surface-premium max-w-md p-8 text-center">
           <ExclamationTriangleIcon className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Link Expired</h1>
+          <h1 className="mb-2 text-xl font-bold text-slate-800 dark:text-white">Link Expired</h1>
           <p className="text-slate-600 dark:text-slate-400">{error}</p>
         </div>
       </div>
@@ -48,9 +53,13 @@ export const SharedProfilePage = () => {
   if (!profile) return null;
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 p-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border-t-8 border-red-600">
+    <div className="min-h-screen bg-gradient-to-br from-[#0b1020] via-[#111a34] to-[#070a14] p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mx-auto max-w-2xl"
+      >
+        <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/90 shadow-xl dark:bg-slate-800/90">
           <div className="bg-red-50 dark:bg-red-900/20 p-6 border-b border-red-100 dark:border-red-900/30">
             <div className="flex items-center space-x-4">
               <div className="bg-red-100 dark:bg-red-900/30 p-3 rounded-full">
@@ -122,7 +131,7 @@ export const SharedProfilePage = () => {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

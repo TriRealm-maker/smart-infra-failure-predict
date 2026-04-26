@@ -28,16 +28,17 @@ export function Card({ children, className, hover = false, glass = false, noise 
       }
       style={hover ? { transformPerspective: 1000, transformStyle: 'preserve-3d' } : undefined}
       className={cn(
-        'rounded-2xl transition-transform duration-300 will-change-transform',
+        'relative overflow-hidden rounded-2xl transition-transform duration-300 will-change-transform',
         glass
-          ? 'bg-white dark:bg-gray-800/80 backdrop-blur-md border border-border-light dark:border-gray-700/50'
-          : 'bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark',
+          ? 'bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-white/60 dark:border-white/10'
+          : 'bg-surface-light/95 dark:bg-surface-dark/95 border border-white/65 dark:border-white/10',
         noise && 'dark:noise-overlay',
         hover && 'shadow-card hover:shadow-card-hover hover:shadow-glow-primary cursor-pointer',
         !hover && 'shadow-card',
         className
       )}
     >
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent opacity-60 dark:from-white/10" />
       {children}
     </motion.div>
   );

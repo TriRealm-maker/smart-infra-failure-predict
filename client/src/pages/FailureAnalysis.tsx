@@ -100,17 +100,21 @@ export const FailureAnalysis = ({ coords }: Props) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-6 pb-24 md:pb-6"
     >
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl md:text-3xl font-bold text-text-primary-light dark:text-text-primary-dark">
-          Failure Analytics Engine
-        </h1>
-        <div className="flex items-center gap-3">
+      <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-5 text-white md:p-6">
+        <div className="absolute -right-14 -top-14 h-40 w-40 rounded-full bg-indigo-500/30 blur-3xl" />
+        <div className="absolute -bottom-16 left-14 h-40 w-40 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold md:text-3xl">Failure Analytics Engine</h1>
+            <p className="mt-1 text-sm text-white/70">AI diagnostics across structural, thermal, and safety telemetry.</p>
+          </div>
+          <div className="flex items-center gap-3">
           <select
             value={assetType}
             onChange={(event) => setAssetType(event.target.value as AssetType)}
-            className="px-3 py-2 rounded-md border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-sm text-text-primary-light dark:text-text-primary-dark"
+            className="rounded-md border border-white/20 bg-slate-900/70 px-3 py-2 text-sm text-white backdrop-blur-md"
             aria-label="Asset type"
           >
             <option value="building">Building</option>
@@ -127,6 +131,7 @@ export const FailureAnalysis = ({ coords }: Props) => {
             <ArrowPathIcon className={cn('h-4 w-4', loading && 'animate-spin')} />
             Run Diagnostics
           </Button>
+          </div>
         </div>
       </div>
 

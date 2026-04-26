@@ -518,3 +518,115 @@ const getFallbackGuide = (disaster: string): string => {
 - [ ] Field communication equipment
 `;
 };
+
+export interface AssistantMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+const ASSISTANT_SYSTEM_PROMPT = `You are ARIA, the in-app AI assistant for CrisisGuard.
+You must answer questions specifically about this CrisisGuard site and its features.
+
+CrisisGuard app surfaces:
+- Dashboard: live telemetry cards, quick actions, Bitchat launch block, ARIA 3D assistant card.
+- Map (/map): nearby services tracker with filters, service legend, map markers, navigation links.
+- Prediction (/prediction): failure analytics engine with diagnostics and asset type selector.
+- Resource Depots (/medical): team/depot profile, documents, secure share link.
+- SOP Guides (/guides): operational guides with print/download.
+- Settings (/settings): emergency contacts for SOS notifications.
+- SOS floating button: sends emergency alert to saved contacts with location.
+
+Bitchat context:
+- Bitchat is a mesh communication helper for field engineers.
+- If user asks how to use Bitchat in this app, explain: launch from dashboard comms block -> install/open app -> join mesh network -> coordinate without internet.
+
+Behavior:
+- Keep responses practical, short, and actionable.
+- Prefer bullets for procedures.
+- If asked about unknown internals, say what is known and give the most relevant in-app route/action.
+- Never invent APIs or hidden pages.`;
+
+const getAssistantFallbackReply = (lastUserMessage: string): string => {
+  const q = lastUserMessage.toLowerCase();
+
+  if (q.includes('bitchat') || q.includes('mesh')) {
+    return [
+      'To use Bitchat from CrisisGuard:',
+      '- Open **Dashboard**.',
+      '- In **FIELD ENG. COMMS — MESH NETWORK**, tap **LAUNCH P2P RADIO**.',
+      '- Install/open Bitchat, then join your field mesh channel.',
+      '- Use it for no-internet coordination while keeping CrisisGuard telemetry open.',
+    ].join('\n');
+  }
+
+  if (q.includes('map') || q.includes('services')) {
+    return [
+      'Map service workflow:',
+      '- Go to **/map** from navbar.',
+      '- Use search + filters in **Nearby Services Tracker**.',
+      '- Tap a service card to fly the map to that marker.',
+      '- Open popup -> **Get Directions** for navigation.',
+    ].join('\n');
+  }
+
+  if (q.includes('sos') || q.includes('emergency')) {
+    return [
+      'SOS setup and use:',
+      '- Add contacts in **Settings** first.',
+      '- Press floating **SOS** button and confirm.',
+      '- CrisisGuard sends location-based alerts to your saved contacts.',
+    ].join('\n');
+  }
+
+  if (q.includes('prediction') || q.includes('failure') || q.includes('diagnostic')) {
+    return [
+      'Failure analytics flow:',
+      '- Open **/prediction**.',
+      '- Pick asset type (building/bridge/tower).',
+      '- Tap **Run Diagnostics** to refresh risk, threats, and recommendations.',
+    ].join('\n');
+  }
+
+  return [
+    'I can help with CrisisGuard navigation and operations.',
+    '- Ask about Dashboard, Map, Prediction, Resource Depots, SOP Guides, Settings, SOS, or Bitchat flow.',
+    '- Example: "How do I use Bitchat from this site?"',
+  ].join('\n');
+};
+
+export const getAssistantResponse = async (messages: AssistantMessage[]): Promise<string> => {
+  const filteredMessages = messages
+    .filter((msg) => msg.role === 'user' || msg.role === 'assistant')
+    .map((msg) => ({ role: msg.role, content: msg.content.trim() }))
+    .filter((msg) => msg.content.length > 0)
+    .slice(-14);
+
+  const lastUserMessage = [...filteredMessages]
+    .reverse()
+    .find((msg) => msg.role === 'user')?.content;
+
+  if (!lastUserMessage) {
+    return 'Ask me about any CrisisGuard feature, including Bitchat launch, map services, diagnostics, SOS, or settings.';
+  }
+
+  try {
+    const completion = await getGroq().chat.completions.create({
+      model: 'llama-3.1-8b-instant',
+      messages: [
+        { role: 'system', content: ASSISTANT_SYSTEM_PROMPT },
+        ...filteredMessages,
+      ],
+      temperature: 0.2,
+      max_tokens: 700,
+    });
+
+    const content = completion.choices[0]?.message?.content?.trim();
+    if (!content) {
+      return getAssistantFallbackReply(lastUserMessage);
+    }
+    return content;
+  } catch (error) {
+    console.error('Assistant chat error:', error);
+    return getAssistantFallbackReply(lastUserMessage);
+  }
+};

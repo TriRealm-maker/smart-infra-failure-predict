@@ -44,14 +44,19 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
+      staggerChildren: 0.12,
+      delayChildren: 0.06,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 14 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.44, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 const aqiMap: Record<number, string> = {
@@ -202,7 +207,7 @@ const handleBitchat = () => {
       className="space-y-6 pb-24 md:pb-6"
     >
       <motion.div variants={itemVariants}>
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-black dark:via-slate-900 dark:to-black p-6 md:p-8 text-white">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-black dark:via-slate-900 dark:to-black p-6 md:p-8 text-white border border-white/15">
           <div className="absolute inset-0 mesh-gradient animate-mesh opacity-60" />
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
@@ -345,8 +350,8 @@ const handleBitchat = () => {
                   to={action.href}
                   className={cn(
                     'flex flex-col items-center justify-center p-6 rounded-2xl',
-                    'bg-surface-light dark:bg-surface-dark',
-                    'border border-border-light dark:border-border-dark',
+                    'bg-surface-light/85 dark:bg-surface-dark/85 backdrop-blur-md',
+                    'border border-white/60 dark:border-white/10',
                     'hover:shadow-lg hover:border-primary/30',
                     'transition-all duration-300 group'
                   )}

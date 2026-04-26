@@ -8,6 +8,11 @@ const getAuthHeaders = (): Record<string, string> => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
+export interface AssistantChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 export const api = {
   auth: {
     register: async (email: string, password: string, name: string) => {
@@ -170,6 +175,17 @@ export const api = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify({ lat, lng, timestamp: new Date().toISOString() }),
+      });
+      return res.json();
+    },
+  },
+
+  assistant: {
+    chat: async (messages: AssistantChatMessage[]) => {
+      const res = await fetch(`${API_BASE}/assistant/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ messages }),
       });
       return res.json();
     },

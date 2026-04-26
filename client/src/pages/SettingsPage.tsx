@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { api } from '../services/api';
 import { EmergencyContact } from '../types';
@@ -22,7 +21,6 @@ const emptyContact: EmergencyContact = {
 };
 
 export const SettingsPage = () => {
-  const { t } = useTranslation();
   const [contacts, setContacts] = useState<EmergencyContact[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -74,7 +72,7 @@ export const SettingsPage = () => {
         setContacts(response.contacts);
         setMessage({ type: 'success', text: 'Emergency contacts saved successfully!' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Failed to save contacts. Please try again.' });
     } finally {
       setSaving(false);
@@ -94,21 +92,23 @@ export const SettingsPage = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="mx-auto max-w-2xl pb-24 md:pb-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark">
-            Settings
+        <div className="relative mb-6 overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 text-white shadow-[0_24px_55px_-30px_rgba(15,23,42,0.85)]">
+          <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-indigo-500/30 blur-3xl" />
+          <div className="absolute -bottom-20 left-1/4 h-44 w-44 rounded-full bg-cyan-500/20 blur-3xl" />
+          <h1 className="relative z-10 text-2xl font-bold md:text-3xl">
+            Emergency Notification Matrix
           </h1>
-          <p className="text-text-secondary-light dark:text-text-secondary-dark mt-1">
-            Manage your emergency contacts for SOS alerts
+          <p className="relative z-10 mt-2 text-sm text-white/75 md:text-base">
+            Manage your emergency contacts for SOS alerts with rapid-response precision.
           </p>
         </div>
 
-        <div className="bg-surface-light dark:bg-surface-dark rounded-2xl border border-border-light dark:border-border-dark p-6">
+        <div className="surface-premium gradient-border p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-lg font-semibold text-text-primary-light dark:text-text-primary-dark">
