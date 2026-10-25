@@ -5,7 +5,6 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { api } from '../services/api';
 import { Coordinates, NearbyPlace } from '../types';
-import { useTheme } from '../context/ThemeContext';
 import { cn } from '../lib/utils';
 import {
   MagnifyingGlassIcon,
@@ -161,7 +160,6 @@ const ErrorState = ({ errorType, onRetry }: ErrorStateProps) => {
 
 export const AssetMap = ({ coords }: Props) => {
   const { t } = useTranslation();
-  const { theme } = useTheme();
   const [places, setPlaces] = useState<NearbyPlace[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorType, setErrorType] = useState<ErrorType>(null);
@@ -172,11 +170,6 @@ export const AssetMap = ({ coords }: Props) => {
   const [resolvedAddresses, setResolvedAddresses] = useState<Record<string, string>>({});
   const mapRef = useRef<L.Map | null>(null);
   const hasRetried = useRef(false);
-
-  const isDark = theme === 'dark';
-  const tileUrl = isDark
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
   const fetchPlaces = () => {
     if (!coords) return;
@@ -320,7 +313,11 @@ export const AssetMap = ({ coords }: Props) => {
         ref={mapRef}
         zoomControl={true}
       >
-        <TileLayer url={tileUrl} attribution='&copy; CartoDB' />
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          maxZoom={19}
+        />
         <Marker position={[coords.lat, coords.lng]} icon={createUserMarker()}>
           <Popup>
             <div className="font-semibold text-center p-1">Mobile Command Center</div>

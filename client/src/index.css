@@ -370,6 +370,11 @@
 .leaflet-container {
   height: 100%;
   width: 100%;
+  @apply bg-surface-light dark:bg-surface-dark;
+}
+
+.dark .leaflet-tile-pane {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
 }
 
 .leaflet-control-zoom {
@@ -384,6 +389,14 @@
 
 .leaflet-control-zoom a:hover {
   @apply bg-gray-100 dark:bg-white/10 !important;
+}
+
+.leaflet-control-attribution {
+  @apply bg-surface-light/80 dark:bg-surface-dark/80 text-text-secondary-light dark:text-text-secondary-dark !important;
+}
+
+.leaflet-control-attribution a {
+  @apply text-primary hover:underline !important;
 }
 
 .custom-scrollbar {
