@@ -179,17 +179,19 @@ export const AssetMap = ({ coords }: Props) => {
     
     api.places.getNearby(coords.lat, coords.lng, 5000)
       .then((data) => {
-        if (data.length === 0 && !hasRetried.current) {
+        if (Array.isArray(data) && data.length > 0) {
+          setPlaces(data);
+          setErrorType(null);
+        } else if (!hasRetried.current) {
           hasRetried.current = true;
-          setTimeout(() => fetchPlaces(), 2000);
-          return;
+          setTimeout(() => fetchPlaces(), 1500);
+        } else {
+          setPlaces(data || []);
+          setErrorType(null);
         }
-        setPlaces(data);
-        setErrorType(null);
       })
       .catch((err: Error) => {
         console.error('Failed to fetch places:', err);
-        
         if (err.message === 'OVERPASS_ALL_MIRRORS_FAILED') {
           setErrorType('timeout');
         } else if (err.message.includes('Failed to fetch') || err.message.includes('Network')) {

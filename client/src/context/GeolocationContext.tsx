@@ -23,9 +23,9 @@ const getCurrentPosition = (): Promise<GeolocationResult> => {
     }
 
     const timeoutId = setTimeout(() => {
-      console.log('Geolocation timeout (10s), using fallback');
+      console.log('Geolocation timeout (4s), using fallback');
       resolve({ coords: FALLBACK_COORDS, usingFallback: true });
-    }, 10000);
+    }, 4000);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -59,7 +59,7 @@ const getCurrentPosition = (): Promise<GeolocationResult> => {
         console.log('Using fallback location due to geolocation error');
         resolve({ coords: FALLBACK_COORDS, usingFallback: true });
       },
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: false, timeout: 4000, maximumAge: 60000 }
     );
   });
 };
