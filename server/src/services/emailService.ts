@@ -1,15 +1,25 @@
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
 const sendEmail = async (to: string, subject: string, htmlContent: string) => {
+  const apiKey = process.env.BREVO_API_KEY?.trim();
+  const senderEmail = process.env.EMAIL_USER?.trim();
+
+  if (!apiKey) {
+    throw new Error('Email failed: BREVO_API_KEY is not set in environment variables');
+  }
+  if (!senderEmail) {
+    throw new Error('Email failed: EMAIL_USER (verified sender) is not set in environment variables');
+  }
+
   const response = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
     headers: {
       'accept': 'application/json',
-      'api-key': process.env.BREVO_API_KEY || '',
+      'api-key': apiKey,
       'content-type': 'application/json'
     } as Record<string, string>,
     body: JSON.stringify({
-      sender: { name: 'CrisisGuard', email: process.env.EMAIL_USER },
+      sender: { name: 'CrisisGuard', email: senderEmail },
       to: [{ email: to }],
       subject: subject,
       htmlContent: htmlContent
@@ -17,9 +27,16 @@ const sendEmail = async (to: string, subject: string, htmlContent: string) => {
   });
 
   if (!response.ok) {
-    const error = await response.json() as { message?: string };
-    console.error('❌ Brevo API error:', error);
-    throw new Error(`Email failed: ${error.message}`);
+    let brevoMessage = '';
+    try {
+      const error = await response.json() as { message?: string };
+      brevoMessage = error.message || JSON.stringify(error);
+    } catch {
+      // Brevo returned a non-JSON body; fall back to status text
+      brevoMessage = response.statusText || 'Unknown error';
+    }
+    console.error(`❌ Brevo API error (HTTP ${response.status}):`, brevoMessage);
+    throw new Error(`Brevo API ${response.status}: ${brevoMessage}`);
   }
 
   console.log(`✅ Email sent to ${to}`);

@@ -176,17 +176,7 @@ export const Dashboard = ({ coords, usingFallback = false, loading = false }: Pr
   };
 
 const handleBitchat = () => {
-  const userAgent = navigator.userAgent.toLowerCase();
-  const isAndroid = userAgent.includes('android');
-  const isIOS = /iphone|ipad|ipod/.test(userAgent);
-
-  if (isAndroid) {
-    window.location.href = 'intent://open/#Intent;scheme=bitchat.droid;package=com.bitchat.droid;end';
-  } else if (isIOS) {
-    window.location.href = 'https://apps.apple.com/us/app/bitchat-mesh/id6748219622';
-  } else {
-    window.location.href = 'https://play.google.com/store/apps/details?id=com.bitchat.droid&hl=en_IN';
-  }
+  window.location.href = 'https://bitchat.free/';
 };
 
   if (!coords) {

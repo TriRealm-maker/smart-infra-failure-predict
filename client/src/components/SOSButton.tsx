@@ -61,7 +61,11 @@ export function SOSButton() {
         setErrorMessage('No emergency contacts configured');
         setState('error');
       } else {
-        setErrorMessage('Failed to send to all contacts');
+        const firstError =
+          Array.isArray(response.results) && response.results.length > 0
+            ? response.results.find((r: { error?: string }) => r.error)?.error
+            : undefined;
+        setErrorMessage(firstError || 'Failed to send to all contacts');
         setState('error');
       }
     } catch (error) {

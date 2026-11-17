@@ -120,7 +120,7 @@ export const sendSOS = async (req: AuthRequest, res: Response): Promise<void> =>
 
     res.json({
       message: `SOS sent: ${successCount} succeeded, ${failureCount} failed`,
-      results,
+      results: response,
     });
   } catch (error) {
     console.error('Error sending SOS:', error);
