@@ -23,6 +23,16 @@ const testBrevoApi = async (): Promise<TestResult> => {
     };
   }
 
+  if (apiKey.startsWith('xsmtpsib-')) {
+    return {
+      provider: 'Brevo HTTP API',
+      apiKeyConfigured: true,
+      apiAccessible: false,
+      errorCode: 'WRONG_KEY_TYPE',
+      errorMessage: 'Key is an SMTP key (xsmtpsib-...). Generate an API key (xkeysib-...) under Settings → SMTP & API → API Keys.'
+    };
+  }
+
   try {
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',

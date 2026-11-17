@@ -10,6 +10,11 @@ const sendEmail = async (to: string, subject: string, htmlContent: string) => {
   if (!senderEmail) {
     throw new Error('Email failed: EMAIL_USER (verified sender) is not set in environment variables');
   }
+  if (apiKey.startsWith('xsmtpsib-')) {
+    throw new Error(
+      'Email failed: BREVO_API_KEY is an SMTP key (xsmtpsib-...). Brevo HTTP API requires an API key starting with xkeysib- — generate one under Settings → SMTP & API → API Keys (not the SMTP section).'
+    );
+  }
 
   const response = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
